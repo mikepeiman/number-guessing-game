@@ -20,6 +20,7 @@ const UIgame = document.querySelector('#game'),
       UIguessBtn = document.querySelector('#guess-btn'),
       UIguessInput = document.querySelector('#guess-input'),
       UImessage = document.querySelector('.message')
+      UIguessesRemaining = document.querySelector('#remaining-guesses')
 
 // assign UI min and max
 UImin.textContent = min;
@@ -28,6 +29,9 @@ UImax.textContent = max;
 // Listen for guess
 UIguessBtn.addEventListener('click', function() {
   let guess = parseInt(UIguessInput.value)
+  // guessesRemainingMessage(`You have ${guessesRemaining-1} guesses left.`, 'grey')
+
+
   
 
   // validate guess (between min-max range)
@@ -43,12 +47,23 @@ UIguessBtn.addEventListener('click', function() {
   // disable input
   UIguessInput.disabled = true
   // inform player of win
-    setMessage(`${winNum} is correct! Good guess - you win! :)`, 'green')
-  // make border green
-  UIguessInput.style.borderColor = 'green'
+  gameOver(true, `${winNum} is correct! Good guess - you win! :)`)
   // change submit button to offer "play again"
+  
   } else {
-
+    //  guess incorrect
+    guessesRemaining -= 1
+    // check if game continues
+    if(guessesRemaining === 0) {
+      gameOver(false, `Awww, you lost! The winning number was ${winNum}`)
+    } else {
+      // Game continues, guess incorrect
+      // border color
+      UIguessInput.style.borderColor = 'red'
+      UIguessInput.value = ''
+      UIguessInput.focus()
+      setMessage(`${guess} is incorrect, ${guessesRemaining} guesses left, try again`, 'red')
+    }
   }
 })
 
@@ -56,4 +71,19 @@ UIguessBtn.addEventListener('click', function() {
 function setMessage(msg, color) {
   UImessage.style.color = color
   UImessage.textContent = msg
+}
+// function guessesRemainingMessage(msg, color) {
+//   UIguessesRemaining.style.color = color
+//   UIguessesRemaining.textContent = msg
+// }
+
+function gameOver(won, msg) {
+  let color
+  won === true ? color = 'green' : color = 'red'
+
+  UIguessInput.disabled = true
+  UIguessInput.style.borderColor = color
+  UImessage.style.color = color
+  setMessage(msg, color)
+
 }
