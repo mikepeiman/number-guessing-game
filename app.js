@@ -48,6 +48,7 @@ function processGuess(e) {
       if(isNaN(guess) || guess < min || guess > max) {
         console.log('Not a valid guess. Guess within range')
         setMessage(`Please enter a number between ${min} and ${max}`, 'red')
+        return
       } 
     
       // check if won
